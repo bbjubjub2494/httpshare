@@ -17,7 +17,6 @@ cat <<END
 </p><p>
   This program:
   <a href='/license'>License</a>
-  <a href='/copy'>Copy</a>
   <a href='https://github.com/bbjubjub2494/httpshare'>Development</a>
 </p>
 <hr/>
