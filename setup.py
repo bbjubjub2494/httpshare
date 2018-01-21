@@ -11,7 +11,7 @@ setup(
     description='Q&D file transfer utility using an ephemeral HTTP service',
 
     # The project's main homepage.
-    url='https://github.com/bbjubjub2494/httpshare',
+    url='https://github.com/bbjubjub2494/httpshare/tree/pypi',
 
     # Author details
     author='Julie Bettens',
