@@ -2,6 +2,12 @@
 
 # Simple regression tests.
 
+if [ -z "$PYTHON" ]; then
+    PYTHON=python
+fi
+
+export PYTHONPATH="$PWD/src"
+
 expected_homepage () {
 cat <<END
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
@@ -219,8 +225,12 @@ END
 }
 
 specialchars_filename='~.,%#?$ *+@&|:;@[]=!"'"'"
-specialchars_filename_urlescaped=~.%2C%25%23%3F%24%20%2A%2B%40%26%7C%3A%3B%40%5B%5D%3D%21%22%27
 specialchars_filename_html='~.,%#?$ *+@&amp;|:;@[]=!&quot;&#039;'
+specialchars_filename_urlescaped=$(python <<END
+from httpshare.compat.urllib.parse import quote
+print(quote("""${specialchars_filename}"""))
+END
+)
 expected_specialchars_index () {
 cat <<END
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
@@ -243,10 +253,6 @@ cat <<END
 </html>
 END
 }
-
-if [ -z "$PYTHON" ]; then
-  PYTHON=python
-fi
 
 case "$MODE" in
 ( debug | release )
@@ -281,7 +287,6 @@ if [ "$MODE" = release ]; then
   cp httpshare.pyz "$tempdir/server.pyz"
   program_options=(server.pyz)
 else
-  export PYTHONPATH="$PWD/src"
   program_options=(-c 'import httpshare; httpshare.main()')
 fi
 
