@@ -1,4 +1,4 @@
-# Copyright 2019 Julie Bettens
+# Copyright 2020 Julie Bettens
 
 
 import os, pkgutil, sys
