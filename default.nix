@@ -1,2 +1,2 @@
-{ nixpkgs ? import <nixpkgs> {} }:
-  nixpkgs.callPackage ./package.nix {}
+# This file allows nix-build to find the flake
+(import nix/flake-compat.nix).defaultNix
