@@ -22,12 +22,12 @@ let
       '';
     }) {};
 in
-pkgs.callPackage ({ stdenv, python, makeWrapper, bats, curl }:
+pkgs.callPackage ({ stdenv, lib, python, makeWrapper, bats, curl }:
   stdenv.mkDerivation {
     pname = "httpshare";
     inherit version src;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A file transfer utility using an ephemeral HTTP service";
       license = licenses.zlib;
       homepage = https://github.com/bbjubjub2494/httpshare;
