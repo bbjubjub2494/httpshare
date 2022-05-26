@@ -16,7 +16,7 @@ License: MIT
 from __future__ import with_statement
 
 __author__ = 'Marcel Hellkamp'
-__version__ = '0.12.19'
+__version__ = '0.12.20'
 __license__ = 'MIT'
 
 # The gevent server adapter needs to patch some modules before they are imported
@@ -847,17 +847,19 @@ class Bottle(object):
         return tob(template(ERROR_PAGE_TEMPLATE, e=res))
 
     def _handle(self, environ):
-        path = environ['bottle.raw_path'] = environ['PATH_INFO']
-        if py3k:
-            try:
-                environ['PATH_INFO'] = path.encode('latin1').decode('utf8')
-            except UnicodeError:
-                return HTTPError(400, 'Invalid path string. Expected UTF-8')
-
         try:
+
             environ['bottle.app'] = self
             request.bind(environ)
             response.bind()
+
+            path = environ['bottle.raw_path'] = environ['PATH_INFO']
+            if py3k:
+                try:
+                    environ['PATH_INFO'] = path.encode('latin1').decode('utf8')
+                except UnicodeError:
+                    return HTTPError(400, 'Invalid path string. Expected UTF-8')
+
             try:
                 self.trigger_hook('before_request')
                 route, args = self.router.match(environ)
@@ -1238,11 +1240,11 @@ class BaseRequest(object):
         self['_cgi.FieldStorage'] = data #http://bugs.python.org/issue18394#msg207958
         data = data.list or []
         for item in data:
-            if item.filename:
+            if item.filename is None:
+                post[item.name] = item.value
+            else:
                 post[item.name] = FileUpload(item.file, item.name,
                                              item.filename, item.headers)
-            else:
-                post[item.name] = item.value
         return post
 
     @property
@@ -2670,6 +2672,7 @@ def auth_basic(check, realm="private", text="Access denied"):
     ''' Callback decorator to require HTTP auth (basic).
         TODO: Add route(check_auth=...) parameter. '''
     def decorator(func):
+        @functools.wraps(func)
         def wrapper(*a, **ka):
             user, password = request.auth or (None, None)
             if user is None or not check(user, password):
