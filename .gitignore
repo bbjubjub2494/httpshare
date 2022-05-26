@@ -1,3 +1,6 @@
+.direnv
+result*
+
 __pycache__
 *.pyc
 *.pyz

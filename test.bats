@@ -76,7 +76,7 @@ cat <<END
         <pre>
 zlib License
 
-Copyright 2020 Julie Bettens
+Copyright 2022 Julie Bettens
 
 This software is provided &#039;as-is&#039;, without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the
@@ -308,14 +308,13 @@ done
 setup () {
 tempdir=$(mktemp -d -p "$BATS_TMPDIR" httpshare.XXXXXX)
 if [ "$MODE" = release ]; then
-  ./make_zipapp.py
   cp httpshare.pyz "$tempdir/server.pyz"
   program_options=(server.pyz)
 else
   program_options=(-c 'import httpshare; httpshare.main()')
 fi
 
-repodir=$(git rev-parse --show-toplevel)
+repodir=$(pwd)
 [ -n "$repodir" ]
 
 cd "$tempdir"
