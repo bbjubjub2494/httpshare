@@ -1,4 +1,4 @@
-# Copyright 2020 Julie Bettens
+# Copyright 2022 Julie Bettens
 
 
 import json, pkgutil
