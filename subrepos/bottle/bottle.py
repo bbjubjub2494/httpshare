@@ -16,7 +16,7 @@ License: MIT (see LICENSE for details)
 from __future__ import with_statement
 
 __author__ = 'Marcel Hellkamp'
-__version__ = '0.12.20'
+__version__ = '0.12.21'
 __license__ = 'MIT'
 
 # The gevent server adapter needs to patch some modules before they are imported
@@ -2795,9 +2795,9 @@ class WSGIRefServer(ServerAdapter):
 
 class CherryPyServer(ServerAdapter):
     def run(self, handler): # pragma: no cover
-        depr(0, 13, "The wsgi server part of cherrypy was split into a new "
-                    "project called 'cheroot'.", "Use the 'cheroot' server "
-                    "adapter instead of cherrypy.")
+        depr("The wsgi server part of cherrypy was split into a new "
+             "project called 'cheroot'. Use the 'cheroot' server "
+             "adapter instead of cherrypy.")
         from cherrypy import wsgiserver # This will fail for CherryPy >= 9
 
         self.options['bind_addr'] = (self.host, self.port)
