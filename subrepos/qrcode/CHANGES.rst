@@ -2,6 +2,50 @@
 Change log
 ==========
 
+7.3.1 (1 October 2021)
+======================
+
+- Improvements for embeded image.
+
+
+7.3 (19 August 2021)
+====================
+
+- Skip color mask if QR is black and white
+
+
+7.2 (19 July 2021)
+==================
+
+- Add Styled PIL image factory, allowing different color masks and shapes in QR codes
+
+- Small performance inprovement
+
+- Add check for border size parameter
+
+
+7.1 (1 July 2021)
+=================
+
+- Add --ascii parameter to command line interface allowing to output ascii when stdout is piped
+
+- Add --output parameter to command line interface to specify output file
+
+- Accept RGB tuples in fill_color and back_color
+
+- Add to_string method to SVG images
+
+- Replace inline styles with SVG attributes to avoid CSP issues
+
+- Add Python3.10 to supported versions
+
+
+7.0 (29 June 2021)
+==================
+
+- Drop Python < 3.6 support.
+
+
 6.1 (14 January 2019)
 =====================
 

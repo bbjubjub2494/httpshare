@@ -5,7 +5,8 @@
 ;
 [subrepo]
 	remote = https://github.com/lincolnloop/python-qrcode
-	branch = v6.1
-	commit = d213e0274410312d9741bb84f93220d65d96e27d
-	parent = 473a19452f408947edcd40e45c494f7fce9772de
-	cmdver = 0.3.1
+	branch = v7.3.1
+	commit = bee948c1b68a26b97e6e2ba03bb7064ae35342c2
+	parent = c8064f2ef13409c3b474ca5ce09999412d60a104
+	cmdver = 0.4.1
+	method = merge
