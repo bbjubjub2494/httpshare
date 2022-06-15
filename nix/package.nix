@@ -32,6 +32,6 @@ stdenv.mkDerivation {
     description = "A file transfer utility using an ephemeral HTTP service";
     license = licenses.zlib;
     homepage = "https://github.com/bbjubjub2494/httpshare";
-    maintainers = maintainers.bbjubjub2494;
+    maintainers = with maintainers; [ bbjubjub2494 ];
   };
 }
