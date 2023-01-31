@@ -2,10 +2,29 @@
 Change log
 ==========
 
+7.4 (1 February 2023)
+=====================
+
+- Restructure the factory drawers, allowing different shapes in SVG image
+  factories as well.
+
+- Add a ``--factory-drawer`` option to the ``qr`` console script.
+
+- Optimize the output for the ``SVGPathImage`` factory (more than 30% reduction
+  in file sizes).
+
+- Add a ``pypng`` image factory as a pure Python PNG solution. If ``pillow`` is
+  *not* installed, then this becomes the default factory.
+
+- The ``pymaging`` image factory has been removed, but its factory shortcut and
+  the actual PymagingImage factory class now just link to the PyPNGImage
+  factory.
+
+
 7.3.1 (1 October 2021)
 ======================
 
-- Improvements for embeded image.
+- Improvements for embedded image.
 
 
 7.3 (19 August 2021)
@@ -180,8 +199,8 @@ Change log
 3.1 (12 Aug 2013)
 =================
 
-* Important fixes for incorrect matches of the alpha-numeric encoding mode.
-  Previously, the pattern would match if a single line was alpha-numeric only
+* Important fixes for incorrect matches of the alphanumeric encoding mode.
+  Previously, the pattern would match if a single line was alphanumeric only
   (even if others wern't). Also, the two characters ``{`` and ``}`` had snuck
   in as valid characters. Thanks to Eran Tromer for the report and fix.
 

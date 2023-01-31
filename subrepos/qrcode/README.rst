@@ -4,11 +4,17 @@ Pure python QR Code generator
 
 Generate QR codes.
 
-For a standard install (which will include pillow_ for generating images),
-run::
+A standard install uses pypng_ to generate PNG files and can also render QR
+codes directly to the console. A standard install is just::
 
-    pip install qrcode[pil]
+    pip install qrcode
 
+For more image functionality, install qrcode with the ``pil`` dependency so
+that pillow_ is installed and can be used for generating images::
+
+    pip install "qrcode[pil]"
+
+.. _pypng: https://pypi.python.org/pypi/pypng
 .. _pillow: https://pypi.python.org/pypi/Pillow
 
 
@@ -137,46 +143,88 @@ background of the SVG with white::
     qrcode.image.svg.SvgFillImage
     qrcode.image.svg.SvgPathFillImage
 
+The ``QRCode.make_image()`` method forwards additional keyword arguments to the
+underlying ElementTree XML library. This helps to fine tune the root element of
+the resulting SVG:
+
+.. code:: python
+
+    import qrcode
+    qr = qrcode.QRCode(image_factory=qrcode.image.svg.SvgPathImage)
+    qr.add_data('Some data')
+    qr.make(fit=True)
+
+    img = qr.make_image(attrib={'class': 'some-css-class'})
+
+You can convert the SVG image into strings using the ``to_string()`` method.
+Additional keyword arguments are forwarded to ElementTrees ``tostring()``:
+
+.. code:: python
+
+    img.to_string(encoding='unicode')
+
 
 Pure Python PNG
 ---------------
 
-Install the following two packages::
+If Pillow is not installed, the default image factory will be a pure Python PNG
+encoder that uses `pypng`.
 
-    pip install -e git+git://github.com/ojii/pymaging.git#egg=pymaging
-    pip install -e git+git://github.com/ojii/pymaging-png.git#egg=pymaging-png
+You can use the factory explicitly from your command line::
 
-From your command line::
-
-    qr --factory=pymaging "Some text" > test.png
+    qr --factory=png "Some text" > test.png
 
 Or in Python:
 
 .. code:: python
 
     import qrcode
-    from qrcode.image.pure import PymagingImage
-    img = qrcode.make('Some data here', image_factory=PymagingImage)
+    from qrcode.image.pure import PyPNGImage
+    img = qrcode.make('Some data here', image_factory=PyPNGImage)
 
 
 Styled Image
 ------------
-To apply styles to the QRCode, use the StyledPilImage image factory. 
-This takes an optional module drawer to control the shape of the QR Code, an 
-optional color mask to change the colors of the QR Code, and an optional image 
-to embed in the center.
 
-These QR Codes are not guaranteed to work with all readers, so do some 
-experimentation and set the error correction to high (especially if embedding an 
-image).
+Works only with versions_ >=7.2 (SVG styled images require 7.4).
 
-Examples to draw the QR code with rounded corners, radial gradiant and embedded image:
+.. _versions: https://github.com/lincolnloop/python-qrcode/blob/master/CHANGES.rst#72-19-july-2021
+
+To apply styles to the QRCode, use the ``StyledPilImage`` or one of the
+standard SVG_ image factories. These accept an optional ``module_drawer``
+parameter to control the shape of the QR Code.
+
+These QR Codes are not guaranteed to work with all readers, so do some
+experimentation and set the error correction to high (especially if embedding
+an image).
+
+Other PIL module drawers:
+
+    .. image:: doc/module_drawers.png
+
+For SVGs, use ``SvgSquareDrawer``, ``SvgCircleDrawer``,
+``SvgPathSquareDrawer``, or ``SvgPathCircleDrawer``.
+
+These all accept a ``size_ratio`` argument which allows for "gapped" squares or
+circles by reducing this less than the default of ``Decimal(1)``.
+
+
+The ``StyledPilImage`` additionally accepts an optional ``color_mask``
+parameter to change the colors of the QR Code, and an optional
+``embeded_image_path`` to embed an image in the center of the code.
+
+Other color masks:
+
+    .. image:: doc/color_masks.png
+
+Here is a code example to draw a QR code with rounded corners, radial gradient
+and an embedded image:
 
 .. code:: python
 
     import qrcode
     from qrcode.image.styledpil import StyledPilImage
-    from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
+    from qrcode.image.styles.moduledrawers.pil import RoundedModuleDrawer
     from qrcode.image.styles.colormasks import RadialGradiantColorMask
 
     qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_L)
@@ -185,14 +233,6 @@ Examples to draw the QR code with rounded corners, radial gradiant and embedded 
     img_1 = qr.make_image(image_factory=StyledPilImage, module_drawer=RoundedModuleDrawer())
     img_2 = qr.make_image(image_factory=StyledPilImage, color_mask=RadialGradiantColorMask())
     img_3 = qr.make_image(image_factory=StyledPilImage, embeded_image_path="/path/to/image.png")
-
-Other module_drawers:
-
-    .. image:: doc/module_drawers.png
-
-Other color masks:
-
-    .. image:: doc/color_masks.png
 
 Examples
 ========
@@ -227,7 +267,7 @@ Pipe ascii output to text file in command line::
     qr --ascii "Some data" > "test.txt"
     cat test.txt
 
-Alternative to piping output to file to avoid PoweShell issues::
+Alternative to piping output to file to avoid PowerShell issues::
 
     # qr "Some data" > test.png
     qr --output=test.png "Some data"

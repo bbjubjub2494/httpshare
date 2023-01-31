@@ -1,19 +1,12 @@
-# Needed on case-insensitive filesystems
-
-# Try to import PIL in either of the two ways it can be installed.
-try:
-    from PIL import Image, ImageDraw
-except ImportError:  # pragma: no cover
-    import Image
-    import ImageDraw
-
 import qrcode.image.base
+from qrcode.compat.pil import Image, ImageDraw
 
 
 class PilImage(qrcode.image.base.BaseImage):
     """
     PIL image builder, default format is PNG.
     """
+
     kind = "PNG"
 
     def new_image(self, **kwargs):
