@@ -1,4 +1,4 @@
-{ stdenv, lib, python, python3, ensureNewerSourcesForZipFilesHook, makeWrapper, bats, curl }:
+{ stdenv, lib, python3, ensureNewerSourcesForZipFilesHook, makeWrapper, bats, curl }:
 
 stdenv.mkDerivation {
   pname = "httpshare";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   buildInputs = [ ensureNewerSourcesForZipFilesHook makeWrapper ];
-  checkInputs = [ python bats curl ];
+  checkInputs = [ python3 bats curl ];
 
   buildPhase = ''
     ${python3}/bin/python make_zipapp.py
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/{bin,share}
     cp httpshare.pyz $out/share
-    makeWrapper ${python}/bin/python $out/bin/httpshare --add-flags $out/share/httpshare.pyz
+    makeWrapper ${python3}/bin/python $out/bin/httpshare --add-flags $out/share/httpshare.pyz
   '';
 
   meta = with lib; {
